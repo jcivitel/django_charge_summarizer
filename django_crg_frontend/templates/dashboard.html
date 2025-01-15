@@ -1,0 +1,48 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Dashboard</h1>
+                <p>Welcome to the dashboard</p>
+                <div>
+                    <label for="month">Monat:</label>
+                    <select id="month">
+                    <option value="" selected>----</option>
+                        {% for month in months %}
+                            <option value="{{ month }}"
+                                    {% if month == current_month %}selected{% endif %}>{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                    <label for="year">Jahr:</label>
+                    <select id="year">
+                        {% for year in years %}
+                            <option value="{{ year }}"
+                                    {% if year == current_year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div id="results"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('month').addEventListener('change', fetchData);
+        document.getElementById('year').addEventListener('change', fetchData);
+
+        function fetchData() {
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+
+            fetch(`/api/v1/charge-invoice/?invoice_month=${month}&invoice_year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = JSON.stringify(data, null, 1);
+                });
+        }
+
+        document.readyState = fetchData();
+    </script>
+{% endblock %}
