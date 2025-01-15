@@ -1,15 +1,14 @@
-[![](https://img.shields.io/maintenance/yes/2024)](https://github.com/jcivitel/)
-[![Static Badge](https://img.shields.io/badge/GitHub-jcivitell-green?logo=github)](https://github.com/jcivitel/GITPROJECT)
-[![GitHub Repo stars](https://img.shields.io/github/stars/jcivitel/GITPROJECT)](https://github.com/jcivitel/GITPROJECT)
-[![Docker Pulls](https://img.shields.io/docker/pulls/jcivitell/GITPROJECT?logo=docker)](https://hub.docker.com/r/jcivitell/GITPROJECT)
-[![Docker Stars](https://img.shields.io/docker/stars/jcivitell/GITPROJECT?logo=docker)](https://hub.docker.com/r/jcivitell/GITPROJECT)
-[![Docker Image Size](https://img.shields.io/docker/image-size/jcivitell/GITPROJECT/latest?logo=docker)](https://hub.docker.com/r/jcivitell/GITPROJECT)
+[![Static Badge](https://img.shields.io/badge/GitHub-jcivitell-green?logo=github)](https://github.com/jcivitel/django_charge_summarizer)
+[![GitHub Repo stars](https://img.shields.io/github/stars/jcivitel/django_charge_summarizer)](https://github.com/jcivitel/django_charge_summarizer)
+[![Docker Pulls](https://img.shields.io/docker/pulls/jcivitell/django_charge_summarizer?logo=docker)](https://hub.docker.com/r/jcivitell/django_charge_summarizer)
+[![Docker Stars](https://img.shields.io/docker/stars/jcivitell/django_charge_summarizer?logo=docker)](https://hub.docker.com/r/jcivitell/django_charge_summarizer)
+[![Docker Image Size](https://img.shields.io/docker/image-size/jcivitell/django_charge_summarizer/latest?logo=docker)](https://hub.docker.com/r/jcivitell/django_charge_summarizer)
 
-# GITPROJECT
+# django_charge_summarizer
 
 ## License
 
 [BSD 3-Clause License](LICENSE)
 
 # Contributors
-[![Contributors Display](https://badges.pufler.dev/contributors/jcivitel/GITPROJECT?size=50&padding=5&bots=false)](https://github.com/jcivitel/GITPROJECT/graphs/contributors)
+[![Contributors Display](https://badges.pufler.dev/contributors/jcivitel/django_charge_summarizer?size=50&padding=5&bots=false)](https://github.com/jcivitel/django_charge_summarizer/graphs/contributors)
