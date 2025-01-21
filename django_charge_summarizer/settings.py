@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery import Celery
 from decouple import Csv
 from decouple import config
 
@@ -18,7 +19,6 @@ SECRET_KEY = config(
     default="django-insecure-ob31vkgtmb1ekju5bns4aufuxt1z1*zv749@il%5v766vq5bo",
     cast=str,
 )
-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "django_filters",
+    'django_celery_beat',
 ]
 
 # Dynamic loading of modules
@@ -75,8 +76,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_charge_summarizer.wsgi.application'
+CELERY_BROKER_URL = config("CELERY_BROKER_URL", default='redis://localhost:6379/0', cast=str)
+CELERY_RESULT_BACKEND = config("CELERY_RESULT_BACKEND", default='redis://localhost:6379/0', cast=str)
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TIMEZONE = config("TIME_ZONE", default="Europe/Berlin", cast=str)
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
+WSGI_APPLICATION = 'django_charge_summarizer.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -100,7 +106,6 @@ DATABASES = {
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -130,7 +135,6 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

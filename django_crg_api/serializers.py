@@ -17,3 +17,9 @@ class ChargeInvoiceFilter(filters.FilterSet):
     class Meta:
         model = ChargeInvoice
         fields = ['invoice_month', 'invoice_year']
+
+
+class ChargeTotalkWhSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChargeInvoice
+        fields = ['charge_invoice_date', 'total_kwh']

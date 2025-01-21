@@ -29,7 +29,10 @@ def process_invoice(filepath):
         invoice_charging_station = re.search(r'Ladestation(\n)(\w+)', text).group(2)
         invoice_customer = re.search(r'Kundennummer (\w+)', text).group(1)
         price_per_kwh = re.search(r'Energy fee (\S+)', text).group(1)
-        invoice_total_kwh = re.search(r'(\d+\.\d+)\s*/\s*kWh\s*(\d+\.\d+)\s*kWh', text).group(2)
+        try:
+            invoice_total_kwh = re.search(r'(\d+\.\d+)\s*/\s*kWh\s*(\d+\.\d+)\s*kWh', text).group(2)
+        except AttributeError:
+            invoice_total_kwh = re.search(r'(\d+\.\d+)\s*/\s*kWh\s*(\d+)\s*kWh', text).group(2)
         invoice_tax_amount = re.search(r'Gesamtsumme Steuern (\S+)', text).group(1)
         invoice_total_amount = re.search(r'Gesamtbetrag \(EUR\) (\S+)', text).group(1)
         # --------------------------------
@@ -46,8 +49,10 @@ def process_invoice(filepath):
             total_amount=invoice_total_amount,
             tax_amount=invoice_tax_amount
         )
-
-        os.rename(filepath, os.path.join(settings.MEDIA_ROOT, 'processed', os.path.basename(filepath)))
+        try:
+            os.rename(filepath, os.path.join(settings.MEDIA_ROOT, 'processed', os.path.basename(filepath)))
+        except FileExistsError:
+            os.remove(filepath)
     else:
         raise FileNotFoundError('File not found in the upload folder')
 
@@ -66,3 +71,17 @@ def unpack_zip(zip_file):
                 new_path = os.path.join(root_dir, file_name)
                 shutil.move(file_path, new_path)
             os.rmdir(folder_path)
+
+
+@shared_task
+def check_upload_folder():
+    upload_folder = os.path.join(settings.MEDIA_ROOT, 'upload')
+    if len(os.listdir(upload_folder)) == 0:
+        print('No files found in the upload folder')
+        return 0
+    for filename in os.listdir(upload_folder):
+        filepath = os.path.join(upload_folder, filename)
+        if filename.endswith('.pdf'):
+            process_invoice.delay(filepath)
+        elif filename.endswith('.zip'):
+            unpack_zip.delay(filepath)

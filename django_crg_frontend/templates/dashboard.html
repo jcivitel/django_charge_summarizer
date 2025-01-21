@@ -1,5 +1,10 @@
 {% extends "base/base.html" %}
 {% load static %}
+
+{% block customjs %}
+    <script src="{% static 'chartjs/chart.js' %}"></script>
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row">
@@ -9,7 +14,7 @@
                 <div>
                     <label for="month">Monat:</label>
                     <select id="month">
-                    <option value="" selected>----</option>
+                        <option value="" selected>----</option>
                         {% for month in months %}
                             <option value="{{ month }}"
                                     {% if month == current_month %}selected{% endif %}>{{ month }}</option>
@@ -23,23 +28,69 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div id="results"></div>
+                <canvas id="myChart" width="800" height="400"></canvas>
             </div>
         </div>
     </div>
     <script>
         document.getElementById('month').addEventListener('change', fetchData);
         document.getElementById('year').addEventListener('change', fetchData);
+        const labels = ""
+        const totalKwh = ""
+        const resultsDiv = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(resultsDiv, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total kWh',
+                    data: totalKwh,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Datum'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'kWh'
+                        }
+                    }
+                }
+            }
+        });
 
         function fetchData() {
             const month = document.getElementById('month').value;
             const year = document.getElementById('year').value;
 
-            fetch(`/api/v1/charge-invoice/?invoice_month=${month}&invoice_year=${year}`)
+            fetch(`/api/v1/charge-total-kwh/?invoice_month=${month}&invoice_year=${year}`)
                 .then(response => response.json())
                 .then(data => {
-                    const resultsDiv = document.getElementById('results');
-                    resultsDiv.innerHTML = JSON.stringify(data, null, 1);
+                    const labels = data.map(item => item.charge_invoice_date);
+                    const totalKwh = data.map(item => item.total_kwh);
+                    myChart.data.labels = labels;
+                    myChart.data.datasets[0].data = totalKwh;
+                    myChart.update();
                 });
         }
 

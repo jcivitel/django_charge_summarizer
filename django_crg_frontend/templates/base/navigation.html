@@ -1,15 +1,18 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url "dashboard" %}"> DGP </a>
+        <a class="navbar-brand" href="{% url "dashboard" %}"> Charge Summarizer </a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url "dashboard" %}"> <i
                             class="bi bi-house-door"></i> Dashboard</a>
                 </li>
+                <li>
+                    <div class="vr m-2"></div>
+                </li>
             </ul>
         </div>
-        <a class="navbar-btn btn btn-outline-warning float-end" href="#">Logout</a>
+        <a class="navbar-btn btn btn-outline-warning float-end" href="{% url "logout" %}">Logout</a>
     </div>
 </nav>
