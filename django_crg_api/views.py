@@ -1,10 +1,10 @@
+from django.db.models import Sum
+from django.db.models.functions import TruncDate
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 
 from django_crg_api.serializers import ChargeInvoiceSerializer, ChargeInvoiceFilter, ChargeTotalkWhSerializer
 from django_crg_backend.models import ChargeInvoice
-from django.db.models import Sum
-from django.db.models.functions import TruncDate
 
 
 class ChargeInvoiceViewSet(viewsets.ReadOnlyModelViewSet):
@@ -26,7 +26,7 @@ class ChargeTotalkWhViewSet(viewsets.ReadOnlyModelViewSet):
         data = (
             ChargeInvoice.objects
             .annotate(date=TruncDate('charge_invoice_date'))  # Truncate timestamp to date
-            .values('charge_invoice_date')  # Group by date
+            .values('charge_invoice_date', "charge_customer")  # Group by date
             .annotate(total_kwh=Sum('total_kwh'))  # Sum total_kwh for each day
             .order_by('date')  # Optional: Order by date
         )

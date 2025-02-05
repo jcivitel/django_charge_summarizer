@@ -10,38 +10,48 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Dashboard</h1>
-                <p>Welcome to the dashboard</p>
-                <div>
-                    <label for="month">Monat:</label>
-                    <select id="month">
-                        <option value="" selected>----</option>
-                        {% for month in months %}
-                            <option value="{{ month }}"
-                                    {% if month == current_month %}selected{% endif %}>{{ month }}</option>
-                        {% endfor %}
-                    </select>
-                    <label for="year">Jahr:</label>
-                    <select id="year">
-                        {% for year in years %}
-                            <option value="{{ year }}"
-                                    {% if year == current_year %}selected{% endif %}>{{ year }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="form-floating">
+                                <select id="month" class="form-select">
+                                    <option value="" selected>----</option>
+                                    {% for month in months %}
+                                        <option value="{{ month }}"
+                                                {% if month == current_month %}selected{% endif %}>{{ month }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="month">Monat:</label>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="form-floating">
+                                <select id="year" class="form-select">
+                                    {% for year in years %}
+                                        <option value="{{ year }}"
+                                                {% if year == current_year %}selected{% endif %}>{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label for="year">Jahr:</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <canvas id="myChart" width="800" height="400"></canvas>
+                <canvas id="Total_kWH" width="800" height="400"></canvas>
+                <canvas id="Total_Charges" width="800" height="400"></canvas>
             </div>
         </div>
     </div>
     <script>
         document.getElementById('month').addEventListener('change', fetchData);
         document.getElementById('year').addEventListener('change', fetchData);
-        const labels = ""
+        const charge_invoice_date = ""
         const totalKwh = ""
-        const resultsDiv = document.getElementById('myChart').getContext('2d');
-        const myChart = new Chart(resultsDiv, {
+        const resultsDiv = document.getElementById('Total_kWH').getContext('2d');
+        const Total_kWH = new Chart(resultsDiv, {
             type: 'bar',
             data: {
-                labels: labels,
+                labels: charge_invoice_date,
                 datasets: [{
                     label: 'Total kWh',
                     data: totalKwh,
@@ -78,6 +88,28 @@
                 }
             }
         });
+        const ChargesDiv = document.getElementById('Total_Charges').getContext('2d');
+        const Total_Charges = new Chart(ChargesDiv, {
+            type: 'pie',
+            data: {
+                labels: ["Customer"],
+                datasets: [{
+                    label: 'Customer',
+                    data: [],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    subtitle: {
+                        display: true,
+                        text: 'Custom Chart Subtitle'
+                    }
+                }
+            }
+        });
 
         function fetchData() {
             const month = document.getElementById('month').value;
@@ -86,11 +118,14 @@
             fetch(`/api/v1/charge-total-kwh/?invoice_month=${month}&invoice_year=${year}`)
                 .then(response => response.json())
                 .then(data => {
-                    const labels = data.map(item => item.charge_invoice_date);
+                    const charge_invoice_date = data.map(item => item.charge_invoice_date);
                     const totalKwh = data.map(item => item.total_kwh);
-                    myChart.data.labels = labels;
-                    myChart.data.datasets[0].data = totalKwh;
-                    myChart.update();
+                    const customer = data.map(item => item.charge_customer);
+                    Total_kWH.data.labels = charge_invoice_date;
+                    Total_kWH.data.datasets[0].data = totalKwh;
+                    Total_kWH.update();
+                    Total_Charges.data.datasets[0].data = customer;
+                    Total_Charges.update();
                 });
         }
 
