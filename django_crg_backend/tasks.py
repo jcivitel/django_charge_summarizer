@@ -28,7 +28,10 @@ def process_invoice(filepath):
         invoice_reference = re.search(r'Referenznummer(\S+)', text).group(1)
         invoice_charging_station = re.search(r'Ladestation(\n)(\w+)', text).group(2)
         invoice_customer = re.search(r'Kundennummer (\w+)', text).group(1)
-        price_per_kwh = re.search(r'Energy fee (\S+)', text).group(1)
+        try:
+            price_per_kwh = re.search(r'Energy fee (\S+)', text).group(1)
+        except AttributeError:
+            price_per_kwh = re.search(r'Stromgebühr (\d+)', text).group(1)
         try:
             invoice_total_kwh = re.search(r'(\d+\.\d+)\s*/\s*kWh\s*(\d+\.\d+)\s*kWh', text).group(2)
         except AttributeError:
@@ -49,8 +52,34 @@ def process_invoice(filepath):
             total_amount=invoice_total_amount,
             tax_amount=invoice_tax_amount
         )
+        invoice_date = datetime.strptime(invoice_date, "%Y/%m/%d")
         try:
-            os.rename(filepath, os.path.join(settings.MEDIA_ROOT, 'processed', os.path.basename(filepath)))
+            if not os.path.exists(os.path.join(
+                    settings.MEDIA_ROOT,
+                    'processed',
+                    str(invoice_date.strftime("%Y")))):
+                os.makedirs(os.path.join(
+                    settings.MEDIA_ROOT,
+                    'processed',
+                    str(invoice_date.strftime("%Y"))))
+            if not os.path.exists(os.path.join(
+                    settings.MEDIA_ROOT,
+                    'processed',
+                    str(invoice_date.strftime("%Y")),
+                    str(invoice_date.strftime("%m")))):
+                os.makedirs(os.path.join(
+                    settings.MEDIA_ROOT,
+                    'processed',
+                    str(invoice_date.strftime("%Y")),
+                    str(invoice_date.strftime("%m"))))
+            os.rename(filepath,
+                      os.path.join(
+                          settings.MEDIA_ROOT,
+                          'processed',
+                          str(invoice_date.strftime("%Y")),
+                          str(invoice_date.strftime("%m")),
+                          os.path.basename(filepath))
+                      )
         except FileExistsError:
             os.remove(filepath)
     else:
@@ -85,3 +114,5 @@ def check_upload_folder():
             process_invoice.delay(filepath)
         elif filename.endswith('.zip'):
             unpack_zip.delay(filepath)
+            check_upload_folder.delay()
+            break

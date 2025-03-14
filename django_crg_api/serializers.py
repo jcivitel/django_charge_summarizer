@@ -21,6 +21,22 @@ class ChargeInvoiceFilter(filters.FilterSet):
 
 
 class ChargeTotalkWhSerializer(serializers.ModelSerializer):
+    charge_customer_id = serializers.SerializerMethodField()
+
     class Meta:
         model = ChargeInvoice
-        fields = ['charge_invoice_date', 'total_kwh', 'charge_customer.id']
+        fields = ['charge_invoice_date', 'total_kwh', 'charge_customer_id']
+
+    def get_charge_customer_id(self, obj):
+        return obj['charge_customer']
+
+
+class ChargeTotalkWhPerCustomerSerializer(serializers.ModelSerializer):
+    charge_customer_id = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ChargeInvoice
+        fields = ['total_kwh', 'charge_customer_id']
+
+    def get_charge_customer_id(self, obj):
+        return obj['charge_customer']

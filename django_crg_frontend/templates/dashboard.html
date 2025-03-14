@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block customjs %}
     <script src="{% static 'chartjs/chart.js' %}"></script>
@@ -9,7 +10,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Dashboard</h1>
+                <h1>{% trans "Dashboard" %}</h1>
                 <div class="container">
                     <div class="row">
                         <div class="col-2">
@@ -21,7 +22,7 @@
                                                 {% if month == current_month %}selected{% endif %}>{{ month }}</option>
                                     {% endfor %}
                                 </select>
-                                <label for="month">Monat:</label>
+                                <label for="month">{% trans "Month:" %}</label>
                             </div>
                         </div>
                         <div class="col-2">
@@ -32,13 +33,21 @@
                                                 {% if year == current_year %}selected{% endif %}>{{ year }}</option>
                                     {% endfor %}
                                 </select>
-                                <label for="year">Jahr:</label>
+                                <label for="year">{% trans "Year:" %}</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <canvas id="Total_kWH" width="800" height="400"></canvas>
-                <canvas id="Total_Charges" width="800" height="400"></canvas>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-10">
+                            <canvas id="Total_kWH" width="800" height="400"></canvas>
+                        </div>
+                        <div class="col-2">
+                            <canvas id="Total_Charges" width="300" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -94,7 +103,7 @@
             data: {
                 labels: ["Customer"],
                 datasets: [{
-                    label: 'Customer',
+                    label: 'Total kWh',
                     data: [],
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
@@ -105,7 +114,7 @@
                 plugins: {
                     subtitle: {
                         display: true,
-                        text: 'Custom Chart Subtitle'
+                        text: 'Total kWh per Customer'
                     }
                 }
             }
@@ -120,11 +129,18 @@
                 .then(data => {
                     const charge_invoice_date = data.map(item => item.charge_invoice_date);
                     const totalKwh = data.map(item => item.total_kwh);
-                    const customer = data.map(item => item.charge_customer);
                     Total_kWH.data.labels = charge_invoice_date;
                     Total_kWH.data.datasets[0].data = totalKwh;
                     Total_kWH.update();
-                    Total_Charges.data.datasets[0].data = customer;
+                });
+
+            fetch(`/api/v1/total-kwh-per-customer/?invoice_month=${month}&invoice_year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+                    const customerNames = data.map(item => item.charge_customer_id);
+                    const totalKwh = data.map(item => item.total_kwh);
+                    Total_Charges.data.labels = customerNames;
+                    Total_Charges.data.datasets[0].data = totalKwh;
                     Total_Charges.update();
                 });
         }

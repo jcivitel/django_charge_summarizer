@@ -1,5 +1,7 @@
+import os
 from datetime import datetime
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -7,6 +9,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.timezone import now
+
+from django_crg_frontend.forms import UploadFileForm
 
 
 def login_view(request):
@@ -40,3 +44,29 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out 🫡")
     return redirect("login")
+
+
+@login_required
+def upload_view(request):
+    template = loader.get_template("upload_invoice.html")
+    template_opts = dict()
+    upload_path = os.path.join(settings.MEDIA_ROOT, "upload")
+
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            files = request.FILES.getlist("files")
+            for uploaded_file in files:
+                if not uploaded_file.name.endswith((".zip", ".pdf")):
+                    messages.error(request, "Only .zip or .pdf files are allowed")
+                    return redirect("upload_invoice")
+                with open(f"{upload_path}/{uploaded_file.name}", "wb+") as destination:
+                    for chunk in uploaded_file.chunks():
+                        destination.write(chunk)
+            messages.success(request, "Files uploaded successfully\nThe files will be processed in the background")
+            return redirect("dashboard")
+    else:
+        form = UploadFileForm()
+        template_opts["form"] = form
+
+    return HttpResponse(template.render(template_opts, request))

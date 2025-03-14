@@ -1,0 +1,11 @@
+{% extends "base/base.html" %}
+{% load i18n %}
+
+{% block content %}
+       <h2>{% trans "Upload Invoice" %}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% trans "Upload" %}</button>
+    </form>
+{% endblock %}
