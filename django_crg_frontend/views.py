@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 
 from django_crg_frontend.forms import UploadFileForm
 
@@ -23,7 +24,7 @@ def login_view(request):
             messages.success(request, f"WELCOME {user}")
             return redirect("dashboard")
         else:
-            messages.error(request, "Invalid username or password")
+            messages.error(request, _("Invalid username or password"))
     return render(request, "login.html")
 
 
@@ -42,7 +43,7 @@ def dashboard(request):
 @login_required
 def logout_view(request):
     logout(request)
-    messages.success(request, "You have been logged out 🫡")
+    messages.success(request, _("You have been logged out 🫡"))
     return redirect("login")
 
 
@@ -57,14 +58,14 @@ def upload_view(request):
         if form.is_valid():
             files = request.FILES.getlist("files")
             for uploaded_file in files:
-                if not uploaded_file.name.endswith((".zip", ".pdf")):
-                    messages.error(request, "Only .zip or .pdf files are allowed")
-                    return redirect("upload_invoice")
                 with open(f"{upload_path}/{uploaded_file.name}", "wb+") as destination:
                     for chunk in uploaded_file.chunks():
                         destination.write(chunk)
-            messages.success(request, "Files uploaded successfully\nThe files will be processed in the background")
+            messages.success(request, _("Files uploaded successfully. The files will be processed in the background"))
             return redirect("dashboard")
+        else:
+            messages.error(request, _("Only .zip or .pdf files are allowed"))
+            return redirect("upload_invoice")
     else:
         form = UploadFileForm()
         template_opts["form"] = form

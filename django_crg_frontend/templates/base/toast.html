@@ -1,3 +1,4 @@
+{% load i18n %}
 {% if messages %}
     <div class="toast-container position-static">
         {% for massage in messages %}
@@ -9,11 +10,11 @@
                         {% endif %}"
                          role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
-                            <strong class="me-auto">BOT{% if massage.tags == "success" %}
+                            <strong class="me-auto">{% trans "Bot" %}{% if massage.tags == "success" %}
                                 😀
                             {% elif massage.tags == "error" %}😡
                             {% endif %}</strong>
-                            <small>Now</small>
+                            <small>{% trans "Now" %}</small>
                             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                         </div>
                         <div class="toast-body {% if massage.tags == "success" %}text-success

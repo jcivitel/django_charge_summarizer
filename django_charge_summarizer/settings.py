@@ -5,6 +5,7 @@ from pathlib import Path
 from celery import Celery
 from decouple import Csv
 from decouple import config
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'django_charge_summarizer.urls'
@@ -138,7 +140,16 @@ REST_FRAMEWORK = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
-LANGUAGE_CODE = config("LANGUAGE_CODE", default="de-de", cast=str)
+LANGUAGE_CODE = config("LANGUAGE_CODE", default="en", cast=str)
+LANGUAGES = (
+    ("en", _("English")),
+    ("de", _("German")),
+)
+
+LOCALE_PATHS = (
+    os.path.join("django_crg_frontend", "templates", "locale"),
+    #os.path.join("django_crg_frontend", "templates", "base", "locale"),
+)
 
 TIME_ZONE = config("TIME_ZONE", default="Europe/Berlin", cast=str)
 USE_I18N = True

@@ -13,7 +13,7 @@
                 <h1>{% trans "Dashboard" %}</h1>
                 <div class="container">
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-6 col-md-2">
                             <div class="form-floating">
                                 <select id="month" class="form-select">
                                     <option value="" selected>----</option>
@@ -25,7 +25,7 @@
                                 <label for="month">{% trans "Month:" %}</label>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-6 col-md-2">
                             <div class="form-floating">
                                 <select id="year" class="form-select">
                                     {% for year in years %}
@@ -40,10 +40,10 @@
                 </div>
                 <div class="container">
                     <div class="row">
-                        <div class="col-10">
+                        <div class="col-12 col-md-10 mt-4 mt-md-0">
                             <canvas id="Total_kWH" width="800" height="400"></canvas>
                         </div>
-                        <div class="col-2">
+                        <div class="col-12 col-md-2 mt-4 mt-md-0">
                             <canvas id="Total_Charges" width="300" height="200"></canvas>
                         </div>
                     </div>

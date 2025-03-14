@@ -163,3 +163,4 @@ cython_debug/
 /.idea
 /utils
 /media/
+/django_charge_summarizer/__pycache__

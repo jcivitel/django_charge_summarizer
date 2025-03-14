@@ -1,10 +1,11 @@
 {% extends "base/base_min.html" %}
 {% load static %}
+{% load i18n %}
 {% block content %}
     <div class="container">
         <div class="d-flex align-items-center justify-content-center my-5">
             <div class="container col-12 col-sm-5">
-                <h1 class="text-center">Welcome to Charge Summarizer</h1>
+                <h1 class="text-center">{% trans "Welcome to Charge Summarizer" %}</h1>
                 <div class="card shadow-lg bg-dark mt-2">
                     <div class="card-body">
                         <form method="post">
@@ -12,15 +13,15 @@
                             <div class="form-floating mb-3">
                                 <input class="form-control" type="text" id="id_username" name="username"
                                        placeholder="Username">
-                                <label for="id_username">Username</label>
+                                <label for="id_username">{% trans "Username" %}</label>
                             </div>
                             <div class="form-floating ">
                                 <input class="form-control" type="password" id="id_password" name="password"
                                        placeholder="Password">
-                                <label for="id_password">Password</label>
+                                <label for="id_password">{% trans "Password" %}</label>
                             </div>
-                            <button class="form-control btn btn-success btn-outline-light mt-2 mb-2" type="submit">Login
-                            </button>
+                            <button class="form-control btn btn-success btn-outline-light mt-2 mb-2"
+                                    type="submit">{% trans "Login" %}</button>
                         </form>
                     </div>
                 </div>

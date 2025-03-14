@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-14 13:26+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\django_crg_frontend\templates\base\navigation.html:11
+#: .\django_crg_frontend\templates\dashboard.html:13
+msgid "Dashboard"
+msgstr "Übersicht"
+
+#: .\django_crg_frontend\templates\base\navigation.html:20
+#: .\django_crg_frontend\templates\upload_invoice.html:5
+msgid "Upload Invoice"
+msgstr "Rechnung hochladen"
+
+#: .\django_crg_frontend\templates\base\navigation.html:51
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: .\django_crg_frontend\templates\base\toast.html:13
+msgid "Bot"
+msgstr "Roboter"
+
+#: .\django_crg_frontend\templates\base\toast.html:17
+msgid "Now"
+msgstr "Jetzt"
+
+#: .\django_crg_frontend\templates\dashboard.html:25
+msgid "Month:"
+msgstr "Monat:"
+
+#: .\django_crg_frontend\templates\dashboard.html:36
+msgid "Year:"
+msgstr "Jahr:"
+
+#: .\django_crg_frontend\templates\login.html:8
+msgid "Welcome to Charge Summarizer"
+msgstr "Willkommen bei Charge Summarizer"
+
+#: .\django_crg_frontend\templates\login.html:16
+msgid "Username"
+msgstr "Benutzername"
+
+#: .\django_crg_frontend\templates\login.html:21
+msgid "Password"
+msgstr "Passwort"
+
+#: .\django_crg_frontend\templates\login.html:24
+msgid "Login"
+msgstr "Anmelden"
+
+#: .\django_crg_frontend\templates\upload_invoice.html:9
+msgid "Upload"
+msgstr "Hochladen"
