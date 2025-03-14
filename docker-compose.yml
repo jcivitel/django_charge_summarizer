@@ -1,0 +1,9 @@
+services:
+  django_charge_summarizer:
+    image: jcivitell/django_charge_summarizer
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      tags:
+      - "jcivitell/django_charge_summarizer:${CIRCLE_TAG:-notag}"
+      
