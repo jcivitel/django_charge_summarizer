@@ -45,6 +45,8 @@
                         </div>
                         <div class="col-12 col-md-2 mt-4 mt-md-0">
                             <canvas id="Total_Charges" width="300" height="200"></canvas>
+                            <div class="text-center mt-2" id="total_kwh_per_customer">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -137,11 +139,15 @@
             fetch(`/api/v1/total-kwh-per-customer/?invoice_month=${month}&invoice_year=${year}`)
                 .then(response => response.json())
                 .then(data => {
+                    const totalKwh_lable = document.getElementById('total_kwh_per_customer');
+                    totalKwh_lable.innerHTML = `<h5>0 kWh</h5>`;
+
                     const customerNames = data.map(item => item.charge_customer_id);
                     const totalKwh = data.map(item => item.total_kwh);
                     Total_Charges.data.labels = customerNames;
                     Total_Charges.data.datasets[0].data = totalKwh;
                     Total_Charges.update();
+                    totalKwh_lable.innerHTML = `<h5>${data[0].total_kwh.toFixed(3)} kWh</h5>`;
                 });
         }
 
