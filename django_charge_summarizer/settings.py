@@ -50,8 +50,12 @@ for name in os.listdir(PROJECT_ROOT + "/.."):
         INSTALLED_APPS.append(name)
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "x_forwarded_for.middleware.XForwardedForMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,6 +65,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_charge_summarizer.urls'
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 TEMPLATES = [
     {
