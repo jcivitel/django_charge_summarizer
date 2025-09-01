@@ -20,7 +20,7 @@ django-timezone-field==7.1
 djangorestframework==3.16.1
 kombu==5.5.4
 mysqlclient==2.2.7
-prompt_toolkit==3.0.51
+prompt_toolkit==3.0.52
 pypdf
 python-crontab==3.3.0
 python-dateutil==2.9.0.post0
